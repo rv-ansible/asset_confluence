@@ -2,7 +2,7 @@
 TPS Asset Inventory Role
 requirements.yml
 - name: tps-asset-inventory
-  src: https://bitbucket.domaingc.net/scm/tpsdev/tps-asset-inventory.git
+  src: https://github.domaingc.net/scm/tpsdev/tps-asset-inventory.git
   scm: git
 
 Call from remote yml with tag:
@@ -25,9 +25,9 @@ Call from remote yml with tag:
 Required data to be prepared when using the role
 
 	- file2upload.csv, this contains the list of data/asset in comma delimited format
-		e.g. https://bitbucket.domaingc.net/projects/TPSDEV/repos/tps_upload_confluence/browse/files/file2upload.csv
+		e.g. https://github.domaingc.net/projects/DEV/repos/tps_upload_confluence/browse/files/file2upload.csv
 	- Required variable by the role
-		e.g. https://bitbucket.domaingc.net/projects/TPSDEV/repos/tps_upload_confluence/browse/group_vars/all
+		e.g. https://github.domaingc.net/projects/DEV/repos/tps_upload_confluence/browse/group_vars/all
 
 		user: confluence username
 		passsecret: confluence password vault encrypted

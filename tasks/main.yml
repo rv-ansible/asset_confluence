@@ -1,0 +1,4 @@
+---
+
+- include_tasks: publish_asset_to_confluence.yml
+  when: publish_asset_to_confluence|default(False)==True

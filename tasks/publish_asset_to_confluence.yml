@@ -1,0 +1,31 @@
+---
+
+- name: Copy credentials
+  template:
+    src: credentials.j2
+    dest: "~/credentials"
+    mode: '0644'
+#  run_once: true
+#  delegate_to: localhost
+
+- name: Copy Generated CSV Files
+  copy:
+    src: file2upload.csv
+    dest: "~/file2upload.csv"
+    mode: '0644'
+#  run_once: true
+#  delegate_to: localhost
+
+- name: Template a file, using symbolic modes equivalent to 0755
+  template:
+    src: tps_confluence_html_table_operator.j2
+    dest: "~/tps_confluence_html_table_operator.py"
+    mode: '0755'
+#  run_once: true
+#  delegate_to: localhost
+
+- name: Run the confluence operator
+  command: "~/tps_confluence_html_table_operator.py"
+ # run_once: true
+ # delegate_to: localhost
+  

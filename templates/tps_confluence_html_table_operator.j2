@@ -1,0 +1,81 @@
+#!/usr/bin/env python
+
+import requests
+import json
+import csv
+import base64
+
+from ConfigParser import ConfigParser
+credentials = ConfigParser()
+credentials.read('credentials')
+
+user = credentials.get('confluence','user')
+password = credentials.get('confluence','password')
+auth = ( user, password )
+headers = {'Content-Type': 'application/json'}
+
+with open('confluence_table.html', 'w') as fl:
+    html = """<html><p>This is auto-genarated by tps_confluence_operator</p> <table border="0">"""
+    html += "<tr>"
+    #html += "<th>#</th><th>hostname</th><th>App</th><th>Env</th><th>IP 1st nic</th><th>IP 2nd nic</th><th>SvrType</th><th>Console</th><th>Console Details</th>"
+{% for table_header in csv_header %}
+    html += "<th>{{ table_header }}</th>"
+{% endfor %}
+    html += "</tr>"
+    with open('file2upload.csv') as csv_file:
+      csv_reader = csv.reader(csv_file, delimiter=',')
+      line_count = 0
+      for row in csv_reader:
+      	my_list = {{ csv_header | length }}
+      	html += "<tr>"
+      	for i in range(0,my_list):		
+      	  html += "<td>"+row[i]+"</td>"
+        html += "<tr>"
+        line_count = 0
+      html += "</table></html>"
+      fl.write(''.join(html))
+
+
+try:
+   result = requests.get("https://confluence.domaingc.net/rest/api/content/{{ confluence_pageID }}", headers=headers, auth=auth)
+   result.raise_for_status()
+   json_output = json.loads(result.text)
+   version = json_output['version']['number']
+   #print(version)
+except requests.exceptions.RequestException as RequestError:
+   print ("Something Went Wrong", RequestError)
+except requests.exceptions.HTTPError as HttpError:
+   print ("Http Error:", HttpError)
+except requests.exceptions.ConnectionError as ConnectionError:
+    print ("Error Connecting:",ConnectionError)
+except requests.exceptions.Timeout as TimeoutError:
+    print ("Timeout Error:", TimeoutError)
+
+
+
+data = {
+        'type': 'page',
+        'title': '{{page_Title}}',
+        'body': {
+            'storage': {
+                'value': html,
+                'representation': 'storage',
+            }
+         },
+        'version': {
+            'number': version + 1
+        }
+}
+
+try:
+   result = requests.put("https://confluence.domaingc.net/rest/api/content/{{ confluence_pageID }}", headers=headers, auth=auth, data=json.dumps(data))
+   result.raise_for_status()
+except requests.exceptions.RequestException as RequestError:
+   print ("Something Went Wrong", RequestError)
+except requests.exceptions.HTTPError as HttpError:
+   print ("Http Error:", HttpError)
+except requests.exceptions.ConnectionError as ConnectionError:
+    print ("Error Connecting:",ConnectionError)
+except requests.exceptions.Timeout as TimeoutError:
+    print ("Timeout Error:", TimeoutError)
+

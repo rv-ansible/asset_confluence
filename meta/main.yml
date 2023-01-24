@@ -1,0 +1,7 @@
+##########################################################################################
+# Purpose: 
+#     - This playbook was created for publishing tps linux inventory to confluence  
+#     - Due to issue where another process takes over 8008, added a task to reserve 8008
+#     - Created scalr process handler to stop and disable scalr daemon
+# Variable Used in this playbook is located at : defaults/main.yml
+##########################################################################################
